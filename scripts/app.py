@@ -30,34 +30,29 @@ class SentimentModel(nn.Module):
         x = self.fc4(x)
         return x
 
-# Load the vocabulary
 with open(r"D:\Senti_chatbot\notebook\vocab.pkl", 'rb') as f:
     vocab = pickle.load(f)
-
-# Define the preprocessing functions
-max_length = 50  # Ensure this matches the value in training
+max_length = 50
 
 def tokenize(text):
     return text.split()
 
 def text_to_sequence(text, vocab, max_length):
     text = text.lower()
-    text = re.sub(r'[^a-z\s]', '', text)  # Remove non-alphabetic characters
+    text = re.sub(r'[^a-z\s]', '', text) 
     tokens = tokenize(text)
     sequence = [vocab.get(token, vocab["<unk>"]) for token in tokens]
     return sequence[:max_length] + [vocab["<pad>"]] * (max_length - len(sequence))
 
-# Load the trained model
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-model = SentimentModel(vocab_size=len(vocab))  # Use the length of the loaded vocab
+model = SentimentModel(vocab_size=len(vocab)) 
 model.load_state_dict(torch.load(r'D:\Senti_chatbot\notebook\sentiment_model.pth', map_location=device, weights_only=True))
 model = model.to(device)
 model.eval()
 
-# Define the label mapping
-label_map = {0: "Negative", 1: "Neutral", 2: "Positive"}  # Ensure these match your training labels
+label_map = {0: "Negative", 1: "Neutral", 2: "Positive"} 
 
-# Prediction function
+
 def predict_sentiment(sentence):
     sequence = text_to_sequence(sentence, vocab, max_length)
     sequence_tensor = torch.tensor([sequence]).to(device)
@@ -67,31 +62,21 @@ def predict_sentiment(sentence):
     return label_map[predicted_label]
 
 
-# Function to fetch a response from the Llama 3.1:1b model
 def fetch_llama_response(prompt):
-        # Initialize the Ollama model
     llama_model = Ollama(base_url="http://127.0.0.1:11436", model="llama3.2:1b")
-
-        
-        # Attempt to fetch response
-    response_stream = llama_model.complete(prompt=prompt)
+    response_stream = llama_model.complete(prompt=prompt,max_tokens=50)
     return response_stream
-    
 
-
-# WhatsApp-style chatbot UI with Streamlit
 def main():
-    st.set_page_config(page_title="WhatsApp-Style Chatbot", layout="centered")
+    st.set_page_config(page_title="Senti Chatbot", layout="centered")
     st.markdown("<h1 style='text-align: center;'>🧠 Sentiment-Driven Chatbot</h1>", unsafe_allow_html=True)
-    st.write("This chatbot tailors responses based on detected sentiment. Chat in a WhatsApp-style interface!")
-
+    
     # Chat history
     if "messages" not in st.session_state:
         st.session_state.messages = []
 
-    # Input area
     user_input = st.text_input("You: ", placeholder="Type something...", key="user_input")
-    if st.button("Send"):
+    if st.button("➤"):
         if user_input.strip():
             # Predict sentiment
             input_sentence = user_input
@@ -105,13 +90,11 @@ def main():
             enhanced_prompt = f"The user's sentiment is {sentiment}. Respond empathetically to: {user_input}"
             bot_response = fetch_llama_response(enhanced_prompt)
 
-            # Append messages
             st.session_state.messages.append({"sender": "user", "text": user_input, "sentiment": sentiment})
             st.session_state.messages.append({"sender": "bot", "text": bot_response, "sentiment": sentiment})
         else:
             st.warning("Please type something to interact with the chatbot.")
 
-    # Display messages in WhatsApp-style
     for msg in st.session_state.messages:
         if msg["sender"] == "user":
             st.markdown(
