@@ -6,6 +6,10 @@ This project is a sentiment-driven chatbot application powered by a PyTorch-base
 Here is a demo video of the sentiment-driven chatbot in action: 
 ![Demo Video](demo_video/senti_chatbot_video.mp4)
 
+<video width="600" controls> 
+<source src="demo_video/senti_chatbot_video.mp4" type="video/mp4"> Your browser does not support the video tag. 
+</video>
+
 ## 🔧 Project Setup
 
 ### 1. Prerequisites
