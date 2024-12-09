@@ -25,10 +25,9 @@ This project is a sentiment-driven chatbot application powered by a PyTorch-base
 
 ## 4. Start the Application  
 
-To start the Streamlit application, run:  
-
-   ```bash  
-   streamlit run app.py
+- To start the Streamlit application, run:  
+  ```bash  
+  streamlit run app.py
 
 ## 🛠 Project Details  
 
