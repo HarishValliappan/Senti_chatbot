@@ -2,6 +2,10 @@
 
 This project is a sentiment-driven chatbot application powered by a PyTorch-based sentiment analysis model and the Ollama Llama model for generating empathetic responses. The chatbot runs on a Streamlit-based WhatsApp-style user interface.
 
+## 🎥 Demo Video 
+Here is a demo video of the sentiment-driven chatbot in action: 
+![Demo Video](demo_video/senti_chatbot_video.mp4)
+
 ## 🔧 Project Setup
 
 ### 1. Prerequisites
@@ -66,9 +70,9 @@ The project uses the following Python libraries:
 - **Torch**: For the sentiment analysis model.  
 - **Ollama API**: To interact with the Llama model for response generation.  
 
-Install all dependencies using:  
-```bash  
-pip install -r requirements.txt
+- Install all dependencies using:  
+  ```bash  
+  pip install -r requirements.txt
 
 ## 🚀 How to Use  
 
